@@ -1,18 +1,17 @@
-# CTF Writeups
+# CTF & Lab Writeups
 
-This repository contains my personal writeups for CTF platforms like
-**TryHackMe** and **HackTheBox**.
+This repository contains my personal writeups and lab notes from **CTF-style cybersecurity training platforms**, including:
 
-The goal is to document my learning process in cybersecurity and
-show a clear methodology for:
+- TryHackMe
+- Hack The Box
+- INE (eJPT preparation)
 
-- Reconnaissance and enumeration
+The goal of this repository is **not just to capture flags**, but to document my learning process and demonstrate a **clear penetration testing methodology**, covering:
+
+- Reconnaissance & enumeration
+- Service and application analysis
 - Exploitation
 - Privilege escalation
 - Lessons learned
 
-For now, the structure is simple:
-- One folder per platform
-- One folder per room/machine
-
-I will gradually improve the structure and the level of detail as I progress.
+These writeups reflect my progression as a beginner transitioning into cybersecurity, with a focus on **clarity, structure, and real understanding**, rather than speed or shortcuts.
