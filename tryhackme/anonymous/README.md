@@ -49,7 +49,7 @@ enum4linux <target_ip>
 **Takeaway**:
 Not every exposed service is a viable entry point. Enumeration should inform decisions, not rush exploitation.
 
-## 📂 FTP Enumeration (Primary Attack Vector)
+## FTP Enumeration (Primary Attack Vector)
 Anonymous FTP Login
 ```bash
 ftp <target_ip>
