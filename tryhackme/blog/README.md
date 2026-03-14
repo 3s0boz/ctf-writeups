@@ -1,6 +1,6 @@
-# Blog — TryHackMe Write-Up
+# Blog - TryHackMe Write-Up
 
-## 📌 Context
+## Context
 
 This write-up documents my work on the **Blog** room from **TryHackMe**.
 
@@ -14,7 +14,7 @@ The focus is on **methodology, decision-making, and enumeration discipline**, al
 
 ---
 
-## 🎯 Objectives
+## Objectives
 
 - Identify exposed network services
 - Properly enumerate a WordPress application
@@ -25,7 +25,7 @@ The focus is on **methodology, decision-making, and enumeration discipline**, al
 
 ---
 
-## 🧭 Methodology Overview
+## Methodology Overview
 
 The lab followed a structured penetration testing approach:
 
@@ -39,7 +39,7 @@ The lab followed a structured penetration testing approach:
 
 ---
 
-## 🔍 Enumeration
+## Enumeration
 
 Enumeration was the most critical phase of this lab.  
 
@@ -103,7 +103,7 @@ This reinforced an important lesson:
 
 Enumeration is not about file type, but about information value.
 
-## 🔑 Credential Discovery
+## Credential Discovery
 
 Using WPScan against the XML-RPC endpoint with the discovered usernames led to valid credentials:
 
@@ -112,7 +112,7 @@ Using WPScan against the XML-RPC endpoint with the discovered usernames led to v
 
 This step was achieved through targeted enumeration, not blind brute forcing.
 
-## 🚪 Initial Access
+## Initial Access
 
 With valid credentials, a WordPress Remote Code Execution vulnerability was leveraged.
 
@@ -131,7 +131,7 @@ The shell was upgraded to a proper TTY for stability:
 ```python
 python3 -c 'import pty; pty.spawn("/bin/bash")'
 ```
-## 🧪 Local Enumeration
+## Local Enumeration
 
 Post-exploitation enumeration revealed:
 
@@ -141,7 +141,7 @@ Post-exploitation enumeration revealed:
 
 The PDF contained contextual hints pointing toward **privilege escalation**, rather than a direct exploit.
 
-## ⬆️ Privilege Escalation
+## Privilege Escalation
 
 Enumerating SUID binaries revealed a custom binary:
 ```bash
@@ -160,12 +160,12 @@ export admin=anyvalue
 ```
 This resulted in a **root shell**.
 
-## 🏁 Flags
+## Flags
 
 - **User Flag**: located in `/media/usb/user.txt`
 - **Root Flag**: located in `/root/root.txt`
 
-## 🧠 Key Takeaways
+## Key Takeaways
 
 - Enumeration is more important than exploitation
 - Not all exposed services are useful entry points
