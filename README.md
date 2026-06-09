@@ -10,7 +10,7 @@ Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBo
 
 | Room | Key Technique |
 |---|---|
-| [Anonymous](tryhackme/anonymous/) | FTP anonymous login, SUID cron misconfiguration |
+| [Anonymous](tryhackme/anonymous/) | FTP anonymous write to cron script, SUID env GTFOBins |
 | [Blog](tryhackme/blog/) | WordPress credential brute force, SUID binary abuse |
 | [Brute It](tryhackme/brute-it/) | HTTP admin panel brute force, SSH key cracking, sudo cat shadow |
 | [Smag Grotto](tryhackme/smag-grotto/) | PCAP credential extraction, cron job injection, sudo apt-get GTFOBins |
