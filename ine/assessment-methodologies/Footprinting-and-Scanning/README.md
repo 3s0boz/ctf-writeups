@@ -1,85 +1,89 @@
-# Footprinting & Scanning — INE eJPT
+# Footprinting and Scanning - INE eJPT
 
-## 📌 Context
-
-This write-up documents my work on the **Footprinting & Scanning** module from the **INE eJPT (Junior Penetration Tester)** training path.
-
-The purpose of this lab was to practice the **early stages of a penetration test**, focusing on reconnaissance, host discovery, and service enumeration using industry-standard tools.
-
-This is not a competitive CTF write-up, but a **methodology-driven lab walkthrough**, aligned with real-world penetration testing workflows.
+INE lab from the Assessment Methodologies module. The objective is to practice the reconnaissance phase of a penetration test: identifying live hosts, mapping open ports, detecting services and versions, and running targeted enumeration scripts - without performing any exploitation.
 
 ---
 
-## 🎯 Objective
+## Host Discovery
 
-The goal of this lab was to identify live hosts, discover exposed services, and gather useful information about the target systems without performing exploitation.
+Identify live hosts within the target subnet before scanning individual machines:
 
-The focus was on:
-- Understanding how different scanning techniques work
-- Choosing the correct approach based on the network context
-- Correctly interpreting scan results
-- Building a clear attack surface map for later phases
-
----
-
-## 🧭 Methodology
-
-The lab followed a structured reconnaissance workflow:
-
-1. **Host Discovery**
-   - Identify which hosts are alive within the target subnet
-   - Avoid unnecessary noise and false positives
-   - Respect scope restrictions (e.g. excluding gateway addresses)
-
-2. **Port Scanning**
-   - Detect open TCP ports on discovered hosts
-   - Distinguish between filtered, closed, and open ports
-   - Adjust scan techniques for performance and reliability
-
-3. **Service & Version Detection**
-   - Identify running services and versions
-   - Correlate services with potential attack vectors
-   - Prepare the ground for deeper enumeration
-
-4. **Service-Specific Enumeration**
-   - Use targeted scripts and techniques (e.g. SMB enumeration)
-   - Extract meaningful information such as users, shares, and configurations
-
----
-
-## 🛠 Tools Used
-
-- **Nmap**
-  - Host discovery
-  - Port scanning
-  - Service and version detection
-  - Nmap Scripting Engine (NSE)
-
-- **Zenmap**
-  - GUI-based network scanning
-  - Visualization of scan results
-  - Easier exploration of large subnets
-
----
-
-## 🔍 Key Commands & Techniques
-
-### Host Discovery
-
+```bash
 nmap -sn 10.0.0.0/20
+```
 
-### Port Scanning
+The `-sn` flag performs a ping sweep only - no port scanning. This avoids unnecessary noise and respects scope boundaries (e.g. excluding gateway addresses).
 
+---
+
+## Port Scanning
+
+Once live hosts are identified, scan for open TCP ports:
+
+```bash
 nmap -sV <target>
+```
 
-### SMB Enumeration (NSE example)
+Key distinctions to read in results:
 
-nmap -p445 --script smb-enum-shares,smb-enum-users <target>
+- `open` - port is accessible and a service is listening
+- `closed` - port is reachable but no service is listening
+- `filtered` - port is blocked by a firewall or packet filter
 
-## 🧠 Key Takeaways
+For a faster initial scan followed by a version-detected deep scan on found ports:
 
-- Proper reconnaissance is critical before exploitation
-- Host discovery techniques behave differently depending on firewall rules
-- NSE scripts provide powerful, automated enumeration when used correctly
-- Scanning is not about running one command, but about reading and adapting results
-- Clean methodology matters more than speed
+```bash
+nmap -p- --min-rate 5000 <target> -oN ports.txt
+nmap -sV -sC -p <found_ports> <target>
+```
+
+---
+
+## Service Enumeration
+
+Version detection with NSE default scripts provides immediate context on running services:
+
+```bash
+nmap -sC -sV <target>
+```
+
+Useful NSE categories for targeted enumeration:
+
+```bash
+nmap --script vuln <target>          # known vulnerability checks
+nmap --script auth <target>          # default/anonymous authentication
+nmap --script discovery <target>     # additional service details
+```
+
+---
+
+## SMB Enumeration
+
+SMB is a high-value target during enumeration. NSE scripts allow deep inspection without requiring exploitation:
+
+```bash
+nmap -p 445 --script smb-enum-shares,smb-enum-users <target>
+```
+
+Additional useful SMB scripts:
+
+```bash
+nmap -p 445 --script smb-security-mode <target>    # guest access, signing
+nmap -p 445 --script smb-os-discovery <target>     # OS and domain info
+```
+
+---
+
+## Key Takeaways
+
+- Host discovery and port scanning are distinct phases. Running a full port scan before confirming which hosts are alive wastes time and generates unnecessary noise.
+- Firewall rules change how scan results look. A `filtered` result is not a dead end - it means a packet filter is present.
+- NSE scripts provide structured enumeration without exploiting anything. They are the correct tool for the reconnaissance phase.
+- SMB enumeration via Nmap exposes misconfigurations (guest access, unsigned packets, exposed shares) that become exploitation vectors in later phases.
+- Methodology matters more than speed. Reading and adapting to scan output is the skill being trained here.
+
+---
+
+## Disclaimer
+
+This lab was completed in a controlled environment provided by INE as part of the eJPT preparation path. All actions were performed strictly for educational purposes.
