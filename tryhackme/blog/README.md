@@ -1,16 +1,6 @@
 # Blog - TryHackMe Write-Up
 
-## Context
-
-This write-up documents my work on the **Blog** room from **TryHackMe**.
-
-The lab simulates a realistic enumeration and exploitation scenario involving a personal **WordPress blog** hosted on a Linux machine.
-
-The objective was to identify exposed services, enumerate the application correctly, obtain an initial foothold, and escalate privileges to retrieve the flags.
-
-This is not a speedrun or puzzle-based CTF write-up. 
-
-The focus is on **methodology, decision-making, and enumeration discipline**, aligned with real-world penetration testing workflows.
+Linux machine running a personal WordPress blog with SSH and SMB also exposed. The lab requires proper web application enumeration before any exploitation is possible - all three non-HTTP services are either dead ends or supporting context.
 
 ---
 
@@ -162,8 +152,10 @@ This resulted in a **root shell**.
 
 ## Flags
 
-- **User Flag**: located in `/media/usb/user.txt`
-- **Root Flag**: located in `/root/root.txt`
+```
+user.txt  -> /media/usb/user.txt
+root.txt  -> /root/root.txt
+```
 
 ## Key Takeaways
 
@@ -174,7 +166,7 @@ This resulted in a **root shell**.
 - Custom binaries frequently introduce logic flaws exploitable via environment variables
 - Methodology beats guessing every time
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This lab was completed in a controlled and legal environment provided by **TryHackMe**.
 All actions were performed strictly for educational purposes.
