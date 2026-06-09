@@ -1,15 +1,7 @@
 
 # TryHackMe - Anonymous
 
-## Overview
-
-**Platform:** TryHackMe  
-**Room:** Anonymous  
-**Difficulty:** Medium  
-**Category:** Linux Misconfiguration, Privilege Escalation  
-**Focus:** Enumeration-driven exploitation and SUID abuse  
-
-This lab demonstrates how **simple service misconfigurations**, when combined, can lead to full system compromise without the need for complex exploits or brute force attacks.
+Linux machine combining FTP anonymous access, a writable script executed by the system, and a SUID binary exploitable via GTFOBins. No credentials are needed at any stage - the entire chain runs on misconfigurations.
 
 ---
 
@@ -123,7 +115,7 @@ Output:
 ```nginx
 root
 ```
-✔ Privilege escalation successful.
+Privilege escalation successful.
 
 ## Step 6 - Capturing the Root Flag
 ```bash
@@ -143,6 +135,6 @@ cat root.txt
 - GTFOBins is essential for real-world privilege escalation
 - Simple misconfigurations often lead to total compromise
 
-## ⚠️ Disclaimer
+## Disclaimer
 This lab was completed in a controlled and legal environment provided by TryHackMe.
 All actions were performed strictly for educational and training purposes.
