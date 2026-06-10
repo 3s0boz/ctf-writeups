@@ -64,7 +64,7 @@ A share can be accessible without appearing in the browse list. Always attempt d
 
 ---
 
-## Flag Retrieval from admin Share
+## Flags
 
 ```bash
 smbclient //demo.ine.local/admin -U admin
