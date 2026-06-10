@@ -14,6 +14,8 @@ nmap demo.ine.local
 nmap -sV -p 80 demo.ine.local
 ```
 
+The first `nmap` finds the open ports; the targeted `-sV -p 80` fingerprints the web service and reveals the exact version, which is what determines whether a public exploit exists.
+
 Port 80 - Rejetto HTTP File Server (HFS) 2.3.
 
 ---
@@ -33,6 +35,8 @@ set RHOSTS demo.ine.local
 exploit
 getuid
 ```
+
+HFS runs as a low-privilege service account, so the shell inherits those limits. Reading the Administrator profile will require escalating the token, not landing a second exploit.
 
 Session context: `Local Service` - limited privileges.
 
@@ -61,6 +65,8 @@ load incognito
 ```bash
 list_tokens -u
 ```
+
+`-u` lists tokens grouped by user. An Administrator entry here means that account authenticated on the box and left a token in memory that the current process can borrow.
 
 Token available:
 
