@@ -66,8 +66,6 @@ type flag2.txt
 
 ---
 
-## File System Enumeration
-
 ## Flag 3 - Hidden File in System32
 
 Recursive search for `.txt` files:
