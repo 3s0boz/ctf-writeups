@@ -56,7 +56,7 @@ exit
 
 Navigate to `http://target1.ine.local/webdav/webshell.asp` to access the web shell.
 
-### Flag 1
+## Flag 1
 
 Flag file visible directly in the WebDAV directory listing.
 
@@ -64,7 +64,7 @@ Flag file visible directly in the WebDAV directory listing.
 4ccc8664b99f44158dd3e42c46ae39eb
 ```
 
-### Flag 2 - Filesystem Enumeration
+## Flag 2 - Filesystem Enumeration
 
 From the web shell:
 
@@ -113,7 +113,7 @@ crackmapexec smb target2.ine.local \
 smbclient //target2.ine.local/C$ -U administrator
 ```
 
-### Flag 3
+## Flag 3
 
 ```
 get flag3.txt
@@ -123,7 +123,7 @@ get flag3.txt
 79b87a8ef8724d9997c774aadaf360a4
 ```
 
-### Flag 4 - Desktop Enumeration
+## Flag 4 - Desktop Enumeration
 
 ```
 cd Users\Administrator\Desktop\

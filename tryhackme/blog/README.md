@@ -1,4 +1,4 @@
-# Blog - TryHackMe Write-Up
+# Blog - TryHackMe
 
 Linux machine running a personal WordPress blog with SSH and SMB also exposed. The lab requires proper web application enumeration before any exploitation is possible - all three non-HTTP services are either dead ends or supporting context.
 

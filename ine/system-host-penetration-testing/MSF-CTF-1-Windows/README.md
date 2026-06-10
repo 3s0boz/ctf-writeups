@@ -30,7 +30,7 @@ run
 
 Meterpreter session obtained as the `MSSQLSERVER` service account.
 
-### Flag 1
+## Flag 1
 
 ```bash
 shell
@@ -55,7 +55,7 @@ getsystem
 
 SYSTEM privileges obtained.
 
-### Flag 2 - System32\config Directory
+## Flag 2 - System32\config Directory
 
 ```bash
 shell
@@ -68,7 +68,7 @@ type flag2.txt
 
 ## File System Enumeration
 
-### Flag 3 - Hidden File in System32
+## Flag 3 - Hidden File in System32
 
 Recursive search for `.txt` files:
 
@@ -86,7 +86,7 @@ C:\Windows\System32\drivers\escaltePrivilegeToGetThisFlag.txt
 type C:\Windows\System32\drivers\escaltePrivilegeToGetThisFlag.txt
 ```
 
-### Flag 4 - Administrator Desktop
+## Flag 4 - Administrator Desktop
 
 ```bash
 cd C:\Users\Administrator\Desktop

@@ -59,7 +59,7 @@ sessions
 sessions -i 1
 ```
 
-### Flag Retrieval
+## Flags
 
 ```bash
 find / -name "flag"

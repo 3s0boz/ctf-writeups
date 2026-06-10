@@ -94,7 +94,7 @@ exploit
 
 Meterpreter session obtained.
 
-### Flag Retrieval
+## Flags
 
 ```bash
 shell
