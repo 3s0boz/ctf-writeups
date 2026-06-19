@@ -2,7 +2,7 @@
 
 Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBox. Each writeup documents the full attack chain - reconnaissance through post-exploitation - with focus on technique reasoning rather than just flag capture.
 
-**43 writeups** across 3 platforms.
+**44 writeups** across 3 platforms.
 
 ---
 
@@ -14,6 +14,7 @@ Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBo
 | [Blog](tryhackme/blog/) | WordPress credential brute force, SUID binary abuse |
 | [Brute It](tryhackme/brute-it/) | HTTP admin panel brute force, SSH key cracking, sudo cat shadow |
 | [Smag Grotto](tryhackme/smag-grotto/) | PCAP credential extraction, cron job injection, sudo apt-get GTFOBins |
+| [Team](tryhackme/team/) | Virtual host chaining, LFI SSH key recovery, sudo command injection, cronjob hijacking |
 | [Tomghost](tryhackme/tomghost/) | Ghostcat CVE-2020-1938, GPG passphrase cracking, sudo zip GTFOBins |
 | [Wgel](tryhackme/wgel/) | HTML comment user leak, exposed SSH key, sudo wget exfiltration |
 | [Year of the Rabbit](tryhackme/year-of-the-rabbit/) | FTP steganography, base64 decode, Hydra SSH, sudo vi GTFOBins |
