@@ -165,15 +165,6 @@ cat /root/root.txt
 
 ---
 
-## Flags
-
-```
-user.txt -> [redacted]
-root.txt -> [redacted]
-```
-
----
-
 ## Disclaimer
 
 This room was completed in the controlled, legal environment provided by TryHackMe.
