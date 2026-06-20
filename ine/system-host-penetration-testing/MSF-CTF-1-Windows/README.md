@@ -30,7 +30,7 @@ run
 
 Meterpreter session obtained as the `MSSQLSERVER` service account.
 
-## Flag 1
+## Flag 1 - Root of C:\
 
 ```bash
 shell
@@ -55,7 +55,7 @@ getsystem
 
 SYSTEM privileges obtained.
 
-## Flag 2 - System32\config Directory
+## Flag 2 - System32\config
 
 ```bash
 shell

