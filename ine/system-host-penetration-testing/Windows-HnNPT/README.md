@@ -60,10 +60,6 @@ Navigate to `http://target1.ine.local/webdav/webshell.asp` to access the web she
 
 Flag file visible directly in the WebDAV directory listing.
 
-```
-4ccc8664b99f44158dd3e42c46ae39eb
-```
-
 ## Flag 2 - Filesystem Enumeration
 
 From the web shell:
@@ -71,10 +67,6 @@ From the web shell:
 ```
 dir C:\
 type C:\flag2.txt
-```
-
-```
-f4369f68b4c049dd8ffe0d2f545ddb2f
 ```
 
 ---
@@ -119,19 +111,11 @@ smbclient //target2.ine.local/C$ -U administrator
 get flag3.txt
 ```
 
-```
-79b87a8ef8724d9997c774aadaf360a4
-```
-
 ## Flag 4 - Desktop Enumeration
 
 ```
 cd Users\Administrator\Desktop\
 get flag4.txt
-```
-
-```
-b3fa315c074d4fa2b7706b22aea22f78
 ```
 
 ---

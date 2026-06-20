@@ -83,14 +83,10 @@ getuid
 
 Context updated to `ATTACKDEFENSE\Administrator`.
 
-## Flags
+## Flag Retrieval
 
 ```bash
 cat C:\\Users\\Administrator\\Desktop\\flag.txt
-```
-
-```
-x28c832a39730b7d46d6c38f1ea18e12
 ```
 
 ---

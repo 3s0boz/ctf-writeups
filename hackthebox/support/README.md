@@ -185,14 +185,6 @@ contexts.
 
 ---
 
-## Flags
-
-```
-root.txt -> d9e8ffc64e2e036ccd95b9445d6a5100
-```
-
----
-
 ## Disclaimer
 
 This box was completed in the controlled, legal environment provided by HackTheBox.
