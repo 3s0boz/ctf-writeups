@@ -88,10 +88,6 @@ ls -l
 cat flag
 ```
 
-```
-697914df7a07bb9b718c8ed258150164
-```
-
 ---
 
 ## Key Takeaways

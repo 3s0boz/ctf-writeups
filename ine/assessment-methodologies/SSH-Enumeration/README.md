@@ -65,17 +65,13 @@ sessions -i 1
 
 `sessions` lists what the module opened on success; `sessions -i 1` interacts with the first one, dropping into the authenticated shell on the target.
 
-## Flags
+## Flag Retrieval
 
 With shell access, `find` locates the flag file anywhere on the filesystem instead of guessing its path, then `cat` reads it.
 
 ```bash
 find / -name "flag"
 cat /flag
-```
-
-```
-eb09cc6f1cd72756da145892892fbf5a
 ```
 
 ---

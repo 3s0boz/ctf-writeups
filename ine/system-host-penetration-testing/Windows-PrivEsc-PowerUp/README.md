@@ -106,10 +106,6 @@ dir
 cat flag.txt
 ```
 
-```
-097ab83639dce0ab3429cb0349493f60
-```
-
 ---
 
 ## Key Takeaways
