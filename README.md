@@ -2,7 +2,7 @@
 
 Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBox. Each writeup documents the full attack chain - reconnaissance through post-exploitation - with focus on technique reasoning rather than just flag capture.
 
-**44 writeups** across 3 platforms.
+**45 writeups** across 3 platforms.
 
 ---
 
@@ -89,6 +89,7 @@ Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBo
 
 | Machine | Key Technique |
 |---|---|
+| [Cap](hackthebox/cap/) | IDOR sequential ID, PCAP FTP credential extraction, password reuse, Python cap_setuid privesc |
 | [Support](hackthebox/support/) | LDAP info attribute leak, machine account quota, RBCD, Impacket S4U getST, Kerberos PsExec |
 
 ---
