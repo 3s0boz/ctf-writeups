@@ -2,7 +2,7 @@
 
 Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBox. Each writeup documents the full attack chain - reconnaissance through post-exploitation - with focus on technique reasoning rather than just flag capture.
 
-**46 writeups** across 3 platforms.
+**47 writeups** across 3 platforms.
 
 ---
 
@@ -22,6 +22,7 @@ Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBo
 | [COLDDBOX:EASY](tryhackme/colddbox-easy/) | Non-standard SSH port, wpscan brute force, wp-config SSH reuse, sudo vim |
 | [Chocolate Factory](tryhackme/chocolate-factory/) | FTP steganography chain, SHA-512 cracking, PATH hijack, sudo vi |
 | [Lookup](tryhackme/lookup/) | Username enumeration, elFinder CVE, PATH hijacking, sudo look file read |
+| [Jump](tryhackme/jump/) | FTP cron upload, PATH hijacking systemd service, sudo writable script, GTFOBins less |
 
 ---
 
