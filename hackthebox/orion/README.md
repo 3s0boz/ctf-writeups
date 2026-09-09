@@ -1,8 +1,8 @@
 # Orion - HackTheBox
 
-Linux machine exposing only SSH and an outdated Craft CMS. An unauthenticated
-deserialization flaw allows arbitrary file inclusion, which combined with nginx log
-poisoning gives remote code execution. Database credentials sitting in the application
+Linux machine exposing only SSH and a Craft CMS instance. An unauthenticated
+deserialization flaw allows PHP session file injection, which delivers remote code
+execution after bypassing CSRF validation. Database credentials in the application
 config lead to a crackable user hash, and a telnet daemon bound to loopback accepts an
 argument injection that bypasses authentication entirely.
 
@@ -14,16 +14,19 @@ Target: `10.129.95.138` (`orion.htb`)
 
 ```bash
 echo "10.129.95.138 orion.htb" >> /etc/hosts
-nmap -sC -sV -p- 10.129.95.138
+nmap -sCV 10.129.95.138
 ```
 
-Only two ports reachable from outside:
+Two open ports: SSH (22) and HTTP (80, nginx). The HTTP server redirects to `orion.htb`.
 
-- SSH (22) - OpenSSH
-- HTTP (80) - nginx, serving Craft CMS 5.6.16
+Web fuzzing finds `/admin`, which redirects to `/admin/login`:
 
-The CMS version is the entire attack surface. Craft CMS 5.6.16 is affected by
-CVE-2025-32432, an unauthenticated remote code execution.
+```bash
+ffuf -u http://orion.htb/FUZZ -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -ic
+```
+
+The admin login page exposes the CMS version in the footer: Craft CMS 5.6.16, affected
+by CVE-2025-32432.
 
 ---
 
@@ -31,53 +34,26 @@ CVE-2025-32432, an unauthenticated remote code execution.
 
 ### CVE-2025-32432 - Craft CMS Pre-Auth RCE
 
-The vulnerability is an unauthenticated Yii2 deserialization on the
-`/actions/assets/generate-transform` endpoint. The gadget chain runs through
-`FieldLayoutBehavior` into `PhpManager`, which performs a `require_once($itemFile)`
-on an attacker controlled path.
+CVE-2025-32432 is a pre-authenticated RCE on the `/actions/assets/generate-transform`
+endpoint. The endpoint processes JSON through Yii's object configuration system, allowing
+arbitrary class instantiation. The primitive is PHP session file injection: a web shell
+gets written into a session file, then the deserialization loads that file as PHP.
 
-The primitive is arbitrary file inclusion, not direct code execution. Any file on
-disk containing PHP will be parsed and executed, so the exploit needs a file the
-attacker can write into.
-
-### Log Poisoning via User-Agent
-
-The nginx access log records the User-Agent header verbatim, which makes it a writable
-file reachable through an unauthenticated HTTP request.
-
-1. Request `/index.php?p=admin/login` to obtain `CraftSessionId` and `CRAFT_CSRF_TOKEN`
-2. Send a request with PHP code in the User-Agent header
-3. Identify a valid `assetId`, any existing asset in the CMS
-4. Send the deserialization payload with `itemFile` pointing at the log
-5. The log is loaded as PHP and the command output comes back in the response
-
-```
-User-Agent: <?php system('id'); return []; ?>
-```
-
-```
-itemFile = /var/log/nginx/access.log
-```
-
-The trailing `return []` matters: the included file has to return a value the
-application can keep working with, otherwise execution breaks before the output
-is rendered.
-
-### Outbound Filtering - No Reverse Shell
-
-A direct reverse shell never connects back. Commands execute and their output is
-returned over HTTP, but no callback ever arrives on the listener.
-
-That combination is the diagnostic signal: if execution clearly works but the
-callback never lands, the problem is egress filtering, not the payload. This box
-blocks outbound connections entirely.
-
-The Metasploit module solves it by driving the session over the HTTP channel that
-is already established, with no callback required:
+The endpoint enforces CSRF validation. Burp confirmed what's needed: a visit to
+`/admin/login` returns `CraftSessionId`, `CRAFT_CSRF_TOKEN`, and the `csrfTokenValue`
+embedded in the response - all three required to pass the check. The Metasploit module
+handles the full CSRF bypass and injection chain:
 
 ```bash
 use exploit/linux/http/craftcms_preauth_rce_cve_2025_32432
+set RHOSTS 10.129.95.138
+set VHOST orion.htb
+run
 ```
+
+The box blocks outbound connections - a direct reverse shell never arrives. The module
+sidesteps this by running the session over the HTTP channel already established by the
+exploit, no listener needed.
 
 Meterpreter session as `www-data`.
 
@@ -175,8 +151,9 @@ Root flag is in `/root/root.txt`.
   three times. Exploits that reuse an already established channel are the answer on
   boxes with no outbound.
 - Arbitrary file inclusion is not remote code execution by itself. It becomes RCE only
-  when paired with a file the attacker can write into. Web server logs are the classic
-  pairing, because any request header ends up on disk.
+  when paired with a file the attacker can write into. PHP session files are the natural
+  pairing here: a request with a PHP payload in a parameter creates a session, and that
+  session file lands on disk in a predictable path.
 - Application config files are the shortest path from a web shell to real credentials.
   `.env` held database root, the database held the user hash, the hash cracked to a
   password reused on SSH. Three steps, all of them from one readable file.
