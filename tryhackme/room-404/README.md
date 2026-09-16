@@ -114,14 +114,6 @@ The ordering that avoids this: confirm the service, confirm the version, confirm
 
 ---
 
-## Flags
-
-```
-flag  -> plaintext in README.md, under the "Staging flag (remove before launch)" line
-```
-
----
-
 ## Key Takeaways
 
 - An exposed `.git` directory leaks the full source plus complete commit history. The flag is the least valuable thing in it - removed credentials, API keys, internal paths and real usernames survive in the object store and are recoverable with `git fsck --unreachable` even when no longer referenced.
