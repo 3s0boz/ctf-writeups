@@ -144,29 +144,6 @@ This drops a shell as `NT AUTHORITY\SYSTEM` on the domain controller.
 
 ---
 
-## Why Impacket Instead of Rubeus
-
-The official walkthrough runs the attack on-target inside the `support` WinRM session:
-Powermad to create the machine account, `Set-ADComputer` to write the delegation, Rubeus
-for S4U. That works, but it depends on three fragile things: binaries uploaded and intact
-on the target, reliable execution inside Evil-WinRM, and a live WinRM session.
-
-All three broke during this lab:
-
-- Rubeus.exe was corrupted on-target and invoked without `.\` (PowerShell does not include
-  the working directory in `PATH`)
-- Mimikatz 2.2.0 was missing the `kerberos::s4u2self` module - a dead end
-- the WinRM session was tied to `support`, while `ldap` has no remote login at all
-
-The Impacket-from-Kali path removes those dependencies entirely: the RBCD attack is only
-LDAP writes and Kerberos requests, with no code execution on the target.
-
-Trade-off: the Rubeus path exposes the individual `.kirbi` tickets and the step-by-step
-S4U mechanics, which is more instructive for understanding the internals and for OSCP-style
-contexts.
-
----
-
 ## Key Takeaways
 
 - Two identities, two roles: `support` writes the delegation (it holds `GenericAll` over

