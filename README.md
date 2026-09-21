@@ -2,7 +2,7 @@
 
 Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBox. Each writeup documents the full attack chain - reconnaissance through post-exploitation - with focus on technique reasoning rather than just flag capture.
 
-**50 writeups** across 3 platforms.
+**51 writeups** across 3 platforms.
 
 ---
 
@@ -25,6 +25,7 @@ Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBo
 | [Jump](tryhackme/jump/) | FTP cron upload, PATH hijacking systemd service, sudo writable script, GTFOBins less |
 | [Room 404](tryhackme/room-404/) | Exposed .git directory, wget repository dump, git object reconstruction |
 | [Fools Mate](tryhackme/fools-mate/) | JSON API move endpoint, server-side validation missing, business logic flaw |
+| [W1seGuy](tryhackme/w1seguy/) | Repeating-key XOR, known-plaintext key recovery, Python brute force |
 
 ---
 
