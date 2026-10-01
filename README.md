@@ -2,7 +2,7 @@
 
 Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBox. Each writeup documents the full attack chain - reconnaissance through post-exploitation - with focus on technique reasoning rather than just flag capture.
 
-**52 writeups** across 3 platforms.
+**53 writeups** across 3 platforms.
 
 ---
 
@@ -27,6 +27,7 @@ Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBo
 | [Fools Mate](tryhackme/fools-mate/) | JSON API move endpoint, server-side validation missing, business logic flaw |
 | [W1seGuy](tryhackme/w1seguy/) | Repeating-key XOR, known-plaintext key recovery, Python brute force |
 | [Boiler CTF](tryhackme/boiler-ctf/) | Anonymous FTP, Joomla web enumeration, plaintext SSH creds in log, backup file credential pivot, SUID find GTFOBins |
+| [UltraTech](tryhackme/ultratech/) | REST API command injection via %0a, SQLite dump, MD5 cracking, docker group privesc |
 
 ---
 
