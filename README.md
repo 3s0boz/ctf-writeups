@@ -2,7 +2,7 @@
 
 Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBox. Each writeup documents the full attack chain - reconnaissance through post-exploitation - with focus on technique reasoning rather than just flag capture.
 
-**55 writeups** across 3 platforms.
+**56 writeups** across 3 platforms.
 
 ---
 
@@ -30,6 +30,7 @@ Methodology-first writeups from TryHackMe, INE (eJPT preparation), and HackTheBo
 | [UltraTech](tryhackme/ultratech/) | REST API command injection via %0a, SQLite dump, MD5 cracking, docker group privesc |
 | [Bookstore](tryhackme/bookstore/) | Deprecated API version LFI, Werkzeug debugger PIN leak, console RCE, XOR SUID privesc |
 | [Mr Robot CTF](tryhackme/mr-robot-ctf/) | WordPress login user enumeration, Hydra brute force, theme editor RCE, MD5 crack, legacy SUID nmap privesc |
+| [Kenobi](tryhackme/kenobi/) | Anonymous SMB share log leak, ProFTPD mod_copy key copy, NFS mount, SUID PATH hijacking |
 
 ---
 
